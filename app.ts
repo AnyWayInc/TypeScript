@@ -1460,3 +1460,260 @@
 /*Использование в типах */
 
 
+// function logMiddleWare<T >(data: T):T{
+//     console.log(data);
+//     return data;
+// }
+
+// //Можем валидировать джинерик чтобы определить что именно мы можем передать в функцию
+// const res = logMiddleWare<number>(10);
+
+// function getSplitHalf<T>(data: Array<T> ): Array<T>{
+//     const l = data.length/2;
+//     return data.splice(0,l);
+// }
+
+
+// getSplitHalf<number>([1,3,4])
+
+// const split:<T>(data:Array<T>) => Array<T> = getSplitHalf; 
+
+// interface ILogLine<T>{
+//     timeStamp: Date;
+//     date: T
+// }
+
+// //Тоже самое что и с интерфейсом
+// type LogLineType <T> = {
+//     timeStamp: Date;
+//     date: T
+// }
+
+// const logLine: ILogLine<{a:number}> = {
+//     timeStamp: new Date(),
+//     date: {
+//         a:1
+//     }
+// }
+
+
+
+/*Ограничение generic */
+
+//Можно в generic экстендить и интерфейс
+// interface Vehicle{
+//     run: number;
+// }
+
+// class Vehicle{
+//     run!:number;
+// }
+
+// //Ограничили классом 
+// function kmToMiles<T extends Vehicle>(vehicle:T): T{
+//     vehicle.run = vehicle.run / 0.62;
+//     return vehicle;
+// }
+
+// class LCV extends Vehicle{
+//     capacity!: number;
+// }
+
+// const vehicle = kmToMiles(new Vehicle());
+// const lcv = kmToMiles(new LCV());
+// kmToMiles({ run: 1 })
+
+// //Можно в extends писать и кастомные (юнион) типы, также можно несколько типов указать (T,Y)
+// function logId<T extends number | string, Y >(id: T, addintionalData: Y): { id:T, data:Y }{
+//     console.log(id);
+//     console.log(addintionalData)
+//     return { id, data:addintionalData };
+// }
+
+
+
+/*Упражнение Функция сортировки id */
+
+
+// const data:IData[] = [
+//     {id: 1, name: 'Вася'},
+//     {id: 2, name: 'Петя'},
+//     {id: 3, name: 'Надя'}
+// ];
+
+// interface IData {
+//     id:number;
+//     name:string;
+// }
+
+// function sortUpDown<T extends IData[]>(choice:string, array:T):T{
+//     if(choice === 'up'){
+//         return array.sort((a,b)=>a.id-b.id)
+//     }else if(choice === 'down'){
+//         return array.sort((a,b)=>{return b.id-a.id})
+//     }throw new Error('Ты чет не то написал')
+// }
+
+
+// console.log(sortUpDown('down',data));
+
+
+
+/*Generic классы */
+
+
+// class Resp<D,E> {
+//     data?:D;
+//     error?:E;
+
+//     constructor( data?:D, error?:E){
+//         if(data){
+//             this.data = data;
+//         }
+//         if(error){
+//             this.error = error;
+//         }
+//     }
+// }
+
+// //Конструируем типы класса иначе будет string, unknown или другой в зависимости от введенных данных
+// const res = new Resp<string,number>('data',0);
+
+// class HTTPResp<F> extends Resp<string,number> {
+//     code!:F;
+    
+//     setCode(code:F){
+//         this.code = code;
+//     }
+// }
+
+// const res2 = new HTTPResp();
+
+
+
+/*Mixins */
+
+// type Constructor = new (...args: any[]) => {}
+// type GConstructor<T = {}> = new (...args: any[]) => T
+
+// class List {
+//     constructor (public items: string[]){}
+// }
+
+// class Accordion{
+//     isOpened!:boolean;
+// }
+
+// type ListType = GConstructor<List>
+// type AccordionType = GConstructor<Accordion>
+
+// //Сам Mixin дает возможность примиксовать классы и также делать extends нескольких классов сделав их typecheck 
+// //Использовать их гуд в миксовании маленьких классов 
+// class ExtendedListClass extends List {
+//     firs(){
+//         return this.items[0];
+//     }
+// }
+
+// function ExtendedList<TBase extends ListType & AccordionType>(Base: TBase){
+//     return class ExtendedList extends Base {
+//         first(){
+//             return this.items[0];
+//         }
+//     }
+// }
+
+// class AccordionList{
+//     isOpened!:boolean;
+//     constructor(public items: string[]){}
+// }
+
+// const list = ExtendedList(AccordionList);
+// const res = new list(['first','second']);
+// console.log(res.first());
+
+
+
+/*KeyOf */
+
+
+// interface IUser{
+//     name: string;
+//     age: number;
+// }
+
+// type KeysOfUser = keyof IUser;
+
+// const key: KeysOfUser = 'age';
+
+// function getValue<T, K extends keyof T>( obj:T, key:K ){
+//     return obj[key];
+// }
+
+// const user: IUser= {
+//     name:'Vasa',
+//     age: 30
+// }
+
+// const userName = getValue(user,'name');
+
+
+
+/*Упражнение Пишем функцию группировки */
+
+
+interface Data {
+    group: number;
+    name: string;
+}
+
+const data:Data[] = [
+    {group:1, name: 'a'},
+    {group:1, name: 'b'},
+    {group:3, name: 'c'},
+]
+
+interface IGroup<T>{
+    [key:string]:T[] 
+}
+
+type key = string | number | symbol;
+
+function group<T extends Record<key,any>>(array: T[], key: keyof T):IGroup<T>{
+    return array.reduce<IGroup<T>>((acc: IGroup<T>,item )=>{
+        const itemKey = item[key];
+        let curEl =acc[itemKey];
+        if(Array.isArray(curEl)){
+            curEl.push(item);
+        }else {
+            curEl = [item];
+        }
+        acc[itemKey] = curEl;
+        return acc;
+    },{})
+}
+
+const res = group<Data>(data,'group')
+console.log(res);
+
+// function GroupBy<T extends Data[],K extends keyof Data>(obj:T, key: K){
+//     if(key == 'name'){
+//         return obj.sort((a,b) => {
+//             if (a.name < b.name)
+//                 return -1;
+//             if ( a.name > b.name)
+//                 return 1;
+//             return 0;})
+//     }else if(key == 'group'){
+//             console.log('1:',obj.filter(x =>x.group == 1));
+//             console.log('2:',obj.filter(x =>x.group == 3));
+//         }
+// }
+
+
+// console.log(GroupBy(data,'group'));
+// // console.log(GroupBy(data,'name'));
+
+
+
+/** */
