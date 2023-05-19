@@ -1,39 +1,54 @@
 "use strict";
 /*Работа с типами */
-const data = [
-    { group: 1, name: 'a' },
-    { group: 1, name: 'b' },
-    { group: 3, name: 'c' },
-];
-function group(array, key) {
-    return array.reduce((acc, item) => {
-        const itemKey = item[key];
-        let curEl = acc[itemKey];
-        if (Array.isArray(curEl)) {
-            curEl.push(item);
-        }
-        else {
-            curEl = [item];
-        }
-        acc[itemKey] = curEl;
-        return acc;
-    }, {});
+class Lead {
+    constructor(name, phone) {
+        this.name = name;
+        this.phone = phone;
+    }
 }
-const res = group(data, 'group');
-console.log(res);
-// function GroupBy<T extends Data[],K extends keyof Data>(obj:T, key: K){
-//     if(key == 'name'){
-//         return obj.sort((a,b) => {
-//             if (a.name < b.name)
-//                 return -1;
-//             if ( a.name > b.name)
-//                 return 1;
-//             return 0;})
-//     }else if(key == 'group'){
-//             console.log('1:',obj.filter(x =>x.group == 1));
-//             console.log('2:',obj.filter(x =>x.group == 3));
-//         }
-// }
-// console.log(GroupBy(data,'group'));
-// // console.log(GroupBy(data,'name'));
-/** */ 
+class NewLead {
+    constructor() {
+        this.observers = [];
+    }
+    //Присоединение к рассылке уведомлений
+    attach(observer) {
+        if (this.observers.includes(observer)) {
+            return;
+        }
+        this.observers.push(observer);
+    }
+    //Отсоединение к рассылке уведомлений
+    detach(observer) {
+        const observerIndex = this.observers.indexOf(observer);
+        if (observerIndex == -1) {
+            return;
+        }
+        this.observers.splice(observerIndex, 1);
+    }
+    notify() {
+        for (const observer of this.observers) {
+            observer.update(this);
+        }
+    }
+}
+class NotificationService {
+    update(subject) {
+        console.log('NotificationService получил уведомление');
+        console.log(subject);
+    }
+}
+class LeadService {
+    update(subject) {
+        console.log('LeadService получил уведомление');
+        console.log(subject);
+    }
+}
+const subject = new NewLead();
+subject.state = new Lead('Антон', '0000');
+const s1 = new NotificationService();
+const s2 = new LeadService();
+subject.attach(s1);
+subject.attach(s2);
+subject.notify();
+subject.detach(s1);
+subject.notify();

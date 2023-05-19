@@ -1,0 +1,23 @@
+{
+  "name": "typescript-demo-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnyWayInc/TypeScript.git"
+  },
+  "author": "Kirill Sasaev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnyWayInc/TypeScript/issues"
+  },
+  "homepage": "https://github.com/AnyWayInc/TypeScript#readme",
+  "dependencies": {
+    "really-relaxed-json": "^0.3.2",
+    "reflect-metadata": "^0.1.13"
+  }
+}
