@@ -17,7 +17,12 @@
   },
   "homepage": "https://github.com/AnyWayInc/TypeScript#readme",
   "dependencies": {
+    "inquirer": "^8.2.0",
     "really-relaxed-json": "^0.3.2",
     "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^20.2.3"
   }
 }

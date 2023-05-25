@@ -20,8 +20,6 @@
 
 // recordStr(493193);
 
-
-
 // Write a function that accepts an array of 10 integers (between 0 and 9), that returns a string of those numbers in the form of a phone number.
 
 // Example
@@ -48,18 +46,16 @@
 
 // console.log(createPhoneNumber([1, 2, 3, 4, 5, 6, 7, 8, 9, 0]));
 
- 
-// Напишите функцию, которая принимает строку из одного или нескольких слов и возвращает ту же строку, 
-// но с перевернутыми всеми словами из пяти или более букв (точно так же, как имя этого Ката). 
-// Передаваемые строки будут состоять только из букв и пробелов. Пробелы будут включены только в том случае, 
+// Напишите функцию, которая принимает строку из одного или нескольких слов и возвращает ту же строку,
+// но с перевернутыми всеми словами из пяти или более букв (точно так же, как имя этого Ката).
+// Передаваемые строки будут состоять только из букв и пробелов. Пробелы будут включены только в том случае,
 // если присутствует более одного слова.
 
 // Примеры:
 
-// spinWords( "Hey fellow warriors" ) => returns "Hey wollef sroirraw" 
-// spinWords( "This is a test") => returns "This is a test" 
+// spinWords( "Hey fellow warriors" ) => returns "Hey wollef sroirraw"
+// spinWords( "This is a test") => returns "This is a test"
 // spinWords( "This is another test" )=> returns "This is rehtona test"
-
 
 // function spinWords(string:string):string{
 //     let changedStr = string.split(' ');
@@ -74,7 +70,6 @@
 //     return res
 // }
 
-
 // Хорошо познакомился со старшим братом Фибоначчи, также известным как Трибоначчи.
 
 // Как уже видно из названия, он работает в основном как Фибоначчи, но суммирует последние 3 (вместо 2) чисел последовательности для генерации следующего.
@@ -83,22 +78,20 @@
 // Итак, если мы хотим начать нашу последовательность Трибоначчи в [1, 1, 1]качестве начального ввода ( подпись AKA ), у нас есть эта последовательность:
 
 // [1, 1 ,1, 3, 5, 9, 17, 31, ...]
-// Но что, если мы начали с [0, 0, 1]подписи? 
+// Но что, если мы начали с [0, 0, 1]подписи?
 // Поскольку, начиная с [0, 1]вместо [1, 1]основного сдвига обычной последовательности Фибоначчи на одну позицию, у вас может возникнуть соблазн подумать, что мы получим ту же самую последовательность,
 // сдвинутую на 2 позиции, но это не так, и мы получим:
 
 // [0, 0, 1, 1, 2, 4, 7, 13, 24, ...]
-// Что ж, вы, возможно, уже догадались об этом, но для ясности: вам нужно создать функцию Фибоначчи, 
+// Что ж, вы, возможно, уже догадались об этом, но для ясности: вам нужно создать функцию Фибоначчи,
 // которая по заданному массиву / списку сигнатур возвращает первые n элементов — сигнатуру, включенную в последовательность, заполненную таким образом.
 
-// Подпись всегда будет содержать 3 цифры; n всегда будет неотрицательным числом; если n == 0, то верните пустой массив 
+// Подпись всегда будет содержать 3 цифры; n всегда будет неотрицательным числом; если n == 0, то верните пустой массив
 // (за исключением C, возвращающего NULL) и будьте готовы ко всему, что не указано явно;)
-
 
 // function tribonacci(signature,n){
 //     //your code here
 // }
-
 
 //Вернуть труе если последние символы совпадают иначе фалсе
 
@@ -115,7 +108,6 @@
 
 // console.log(solution('abc',''));
 
-
 // //Вернуть наибольшее и наименьшее число в строчку через пробел
 
 // function hightAndLow(num: string){
@@ -126,3 +118,96 @@
 // }
 
 // console.log(hightAndLow("8 3 -5 42 -1 0 0 -9 4 7 4 -4"))
+
+//Задание на интерес
+
+interface TreeElement {
+  id: number,
+  parent?: number | 'root',
+  type?: string | null
+  }
+  
+  class TreeStore {
+    tree:TreeElement[];
+  
+    constructor(items: TreeElement[]) {
+      this.tree = items;
+    }
+  
+    getItem(id: number) {
+      return this.tree.find((treeElement) => treeElement.id === id);
+    }
+  
+    treeElementHasParent(treeElement:TreeElement) {
+      return treeElement && treeElement?.parent && treeElement.parent !== 'root';
+    }
+  
+    getAllParents(id: number) {
+      const result:TreeElement[] = [];
+  
+      let currentNode = this.getItem(id);
+  
+      while (currentNode) {
+        if (this.treeElementHasParent(currentNode)) {
+          const newId:any = currentNode.parent;
+  
+          currentNode = this.getItem(newId);
+  
+          if (currentNode) {
+            result.push(currentNode);
+          }
+        } else {
+          currentNode = undefined;
+        }
+      }
+  
+      return result;
+    }
+  }
+  
+  const items:TreeElement[] = [
+    {
+      id: 1,
+      parent: 'root',
+    },
+    {
+      id: 2,
+      parent: 1,
+      type: 'test',
+    },
+    {
+      id: 3,
+      parent: 1,
+      type: 'test',
+    },
+  
+    {
+      id: 4,
+      parent: 2,
+      type: 'test',
+    },
+    {
+      id: 5,
+      parent: 2,
+      type: 'test',
+    },
+    {
+      id: 6,
+      parent: 2,
+      type: 'test',
+    },
+  
+    {
+      id: 7,
+      parent: 4,
+      type: null,
+    },
+    {
+      id: 8,
+      parent: 4,
+      type: null,
+    },
+  ];
+  const ts = new TreeStore(items);
+  
+  console.log(ts.getAllParents(7));
